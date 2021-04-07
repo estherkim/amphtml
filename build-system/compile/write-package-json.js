@@ -16,18 +16,20 @@
 
 /**
  * @fileoverview
- * Creates a package.json for a given extension and release to be published on npm.
+ * Creates a package.json for a given extension to be published on npm.
  *
  * The Github Action that runs this is triggered by releases. See .github/workflows/publish-npm-packages.yml
  */
 
-const [extension, ampversion] = process.argv.slice(2);
+const [extension, major, ampversion] = process.argv.slice(2);
 const {writeFile} = require('fs/promises');
 
-function generatePackageJson(extension, version) {
+function writePackageJson() {
+  const minor = ampversion.slice(0, 10);
+  const patch = ampversion.slice(-3);
   const json = {
     name: `@estherproject/${extension}`,
-    version: getNpmVersion(),
+    version: `${major}.${minor}.${patch}`,
     description: `AMP HTML ${extension} Component`,
     author: 'The AMP HTML Authors',
     license: 'Apache-2.0',
@@ -44,34 +46,26 @@ function generatePackageJson(extension, version) {
         require: 'dist/component.react.js',
       },
     },
-    files: ['dist/*'],
+    files: [`${major}/dist/*`],
     repository: {
       type: 'git',
       url: 'https://github.com/ampproject/amphtml.git',
-      directory: `extensions/${extension}/${version}`,
+      directory: `extensions/${extension}`,
     },
-    homepage: `https://github.com/ampproject/amphtml/tree/master/extensions/${extension}/${version}`,
+    homepage: `https://github.com/ampproject/amphtml/tree/master/extensions/${extension}`,
     peerDependencies: {
       preact: '^10.2.1',
       react: '^17.0.0',
     },
   };
 
-  const jsonFile = `extensions/${extension}/${version}/package.json`;
-  writeFile(jsonFile, JSON.stringify(json)).catch((e) => {
-    console./*OK*/ error(e);
-    process.exitCode = 1;
-  });
-  console./*OK*/ log('Wrote', jsonFile);
+  writeFile(`extensions/${extension}/package.json`, JSON.stringify(json)).catch(
+    (e) => {
+      console./*OK*/ error(e);
+      process.exitCode = 1;
+    }
+  );
+  console./*OK*/ log('Wrote package.json for', extension, major);
 }
 
-function getNpmVersion() {
-  return 'estherversion';
-}
-
-function main() {
-  console.log('AMP version', ampversion);
-  generatePackageJson(extension, '1.0');
-}
-
-main();
+writePackageJson();

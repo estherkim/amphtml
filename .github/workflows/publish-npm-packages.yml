@@ -4,23 +4,32 @@ on:
     inputs:
       ampversion:
         description: 'AMP version'
-        required: true   
+        required: true
+      channel:
+        description: 'release channel'
+        required: false
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         extension: ['amp-fit-text', 'amp-video']
+        major: ['1.0']
     steps:
-    - uses: actions/checkout@v2     
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.events.inputs.ampversion }}
+    # Finish early if the major extension version does not exist.        
+    - run: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }} || exit
     - uses: actions/setup-node@v2
       with:
         node-version: '14.x'        
         registry-url: 'https://registry.npmjs.org'
-    # add step to build binaries     
-    - run: node ./build-system/compile/write-package-json.js ${{matrix.extension }} ${{ github.event.inputs.ampversion }}    
-    - run: cat ./extensions/${{ matrix.extension }}/1.0/package.json
-    # - run: npm publish --access public --prefix=${{ GITHUB_WORKSPACE }}/extensions/{{  matrix.extension  }}
+    # add step to build binaries, or can this come from CDN?
+    # can script live in .github/workflows?
+    - run: node ./build-system/compile/write-package-json.js ${{ matrix.extension }} ${{ matrix.major }} ${{ github.event.inputs.ampversion }}
+    - run: cat ./extensions/${{ matrix.extension }}/${{ matrix.major }}/package.json
+    # - run: cd ./extensions/${{ matrix.extension }}/${{ matrix.major }} &&  npm publish --access public --tag ${{ github.events.inputs.channel }}
     #   env: 
     #     # TODO: replace with ${{ secrets.NPM_TOKEN }}
     #     NODE_AUTH_TOKEN: //TODO
