@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        extension: ['amp-fit-text']         
+        extension: ['amp-fit-text']
     steps:
       # TODO iterate over extensions dir
     - uses: actions/checkout@v2     
