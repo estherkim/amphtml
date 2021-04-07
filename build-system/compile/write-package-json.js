@@ -22,9 +22,9 @@
  */
 
 const [extension, major, ampversion] = process.argv.slice(2);
-const {writeFile} = require('fs/promises');
+const {readFile, writeFile} = require('fs/promises');
 
-function writePackageJson() {
+async function writePackageJson() {
   const minor = ampversion.slice(0, 10);
   const patch = ampversion.slice(-3);
   const json = {
@@ -65,6 +65,8 @@ function writePackageJson() {
       process.exitCode = 1;
     }
   );
+  const result = await readFile(`extensions/${extension}/package.json`);
+  console.log(result);
   console./*OK*/ log('Wrote package.json for', extension, major);
 }
 

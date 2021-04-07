@@ -21,7 +21,7 @@ jobs:
         ref: ${{ github.events.inputs.ampversion }}
     # Finish early if the major extension version does not exist.        
     - name: 'Exit early if major version does not exist'
-      run: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }} || exit
+      run: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }} || exit 0
     - uses: actions/setup-node@v2
       with:
         node-version: '14.x'        
