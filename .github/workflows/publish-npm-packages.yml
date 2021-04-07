@@ -14,21 +14,24 @@ jobs:
     strategy:
       matrix:
         extension: ['amp-fit-text', 'amp-video']
-        major: ['1.0']
+        major: ['1.0', '2.0']
     steps:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.events.inputs.ampversion }}
     # Finish early if the major extension version does not exist.        
-    - run: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }} || exit
+    - name: 'Exit early if major version does not exist'
+      run: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }} || exit
     - uses: actions/setup-node@v2
       with:
         node-version: '14.x'        
         registry-url: 'https://registry.npmjs.org'
     # add step to build binaries, or can this come from CDN?
     # can script live in .github/workflows?
-    - run: node ./build-system/compile/write-package-json.js ${{ matrix.extension }} ${{ matrix.major }} ${{ github.event.inputs.ampversion }}
-    - run: cat ./extensions/${{ matrix.extension }}/${{ matrix.major }}/package.json
+    - name: 'Write package.json and publish'
+      run: |
+        node ./build-system/compile/write-package-json.js ${{ matrix.extension }} ${{ matrix.major }} ${{ github.event.inputs.ampversion }}
+        cat ./extensions/${{ matrix.extension }}/${{ matrix.major }}/package.json
     # - run: cd ./extensions/${{ matrix.extension }}/${{ matrix.major }} &&  npm publish --access public --tag ${{ github.events.inputs.channel }}
     #   env: 
     #     # TODO: replace with ${{ secrets.NPM_TOKEN }}
