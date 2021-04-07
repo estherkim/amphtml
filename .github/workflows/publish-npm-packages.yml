@@ -1,0 +1,33 @@
+name: Publish npm packages
+on:
+  workflow_dispatch:
+    inputs:
+      ampversion:
+        description: 'AMP version'
+        required: true
+strategy:
+  matrix:
+    extension: ['amp-fit-text', 'amp-video']        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # TODO iterate over extensions dir
+    - uses: actions/checkout@v2     
+    # - uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14.x'        
+    #     registry-url: 'https://registry.npmjs.org'    
+    - uses: actions/github-script@v3
+      with:
+        script: |          
+          const script = require(`${process.env.GITHUB_WORKSPACE}/.github/workflows/publish-npm-packages.js`)
+          script( {{ process.env.matrix.extension }}, {{ process.env.inputs.ampversion }})
+    - run: cd ./extensions/{{ matrix.extension }}/1.0
+    - run: cat package.json
+    # - run: npm install
+    # - run: npm publish --access public --prefix=${{ GITHUB_WORKSPACE }}/extensions/{{  matrix.extension  }}
+    #   env: 
+    #     # TODO: replace with ${{ secrets.NPM_TOKEN }}
+    #     NODE_AUTH_TOKEN: //TODO
+
