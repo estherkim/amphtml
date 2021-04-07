@@ -19,7 +19,7 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     # add step to build binaries     
     - run: node ./build-system/compile/write-package-json.js ${{matrix.extension }} ${{ github.event.inputs.ampversion }}    
-    - run: cd ./extensions/{{ matrix.extension }}/1.0
+    - run: cd ./extensions/${{ matrix.extension }}/1.0
     - run: cat package.json
     # - run: npm publish --access public --prefix=${{ GITHUB_WORKSPACE }}/extensions/{{  matrix.extension  }}
     #   env: 
