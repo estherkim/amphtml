@@ -65,7 +65,7 @@ async function writePackageJson() {
       process.exitCode = 1;
     }
   );
-  const result = await readFile(`extensions/${extension}/package.json`);
+  const result = await readFile(`extensions/${extension}/package.json`, 'utf8');
   console.log(result);
   console./*OK*/ log('Wrote package.json for', extension, major);
 }

@@ -29,6 +29,7 @@ jobs:
       if: test -d ./extensions/${{ matrix.extension }}/${{ matrix.major }}
       run: |
         node ./build-system/compile/write-package-json.js ${{ matrix.extension }} ${{ matrix.major }} ${{ github.event.inputs.ampversion }}
+        pwd
         cat ./extensions/${{ matrix.extension }}/${{ matrix.major }}/package.json
     # - run: cd ./extensions/${{ matrix.extension }}/${{ matrix.major }} &&  npm publish --access public --tag ${{ github.events.inputs.channel }}
     #   env: 
