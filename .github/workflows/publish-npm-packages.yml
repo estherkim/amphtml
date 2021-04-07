@@ -19,7 +19,7 @@ jobs:
         node-version: '14.x'        
         registry-url: 'https://registry.npmjs.org'
     - run: npm install minimist
-    - run: node ./build-system/compile-write-package-json.js --${{matrix.extension }} --${{ inputs.ampversion }}
+    - run: node ./build-system/compile-write-package-json.js --${{matrix.extension }} --${{ github.event.inputs.ampversion }}
     # - run: ls -R
     # - uses: actions/github-script@v3
     #   with:
