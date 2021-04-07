@@ -10,22 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        extension: ['amp-fit-text']
+        extension: ['amp-fit-text', 'amp-video']
     steps:
-      # TODO iterate over extensions dir
     - uses: actions/checkout@v2     
     - uses: actions/setup-node@v2
       with:
         node-version: '14.x'        
         registry-url: 'https://registry.npmjs.org'
-    - run: npm install minimist
-    - run: node ./build-system/compile-write-package-json.js --${{matrix.extension }} --${{ inputs.ampversion }}
-    # - run: ls -R
-    # - uses: actions/github-script@v3
-    #   with:
-    #     script: |          
-    #       const script = require(`${process.env.GITHUB_WORKSPACE}/build-system/compile/write-package-json`)
-    #       script(process.env.matrix.extension, process.env.inputs.ampversion)
+    # add step to build binaries     
+    - run: node ./build-system/compile-write-package-json.js ${{matrix.extension }} ${{ github.event.inputs.ampversion }}    
     - run: cd ./extensions/{{ matrix.extension }}/1.0
     - run: cat package.json
     # - run: npm publish --access public --prefix=${{ GITHUB_WORKSPACE }}/extensions/{{  matrix.extension  }}
