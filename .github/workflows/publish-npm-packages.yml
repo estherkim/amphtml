@@ -4,13 +4,13 @@ on:
     inputs:
       ampversion:
         description: 'AMP version'
-        required: true
-strategy:
-  matrix:
-    extension: ['amp-fit-text', 'amp-video']        
+        required: true   
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        extension: ['amp-fit-text', 'amp-video']         
     steps:
       # TODO iterate over extensions dir
     - uses: actions/checkout@v2     
