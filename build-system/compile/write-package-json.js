@@ -21,6 +21,7 @@
  * The Github Action that runs this is triggered by releases. See .github/workflows/publish-npm-packages.yml
  */
 
+const argv = require('minimist')(process.argv.slice(2));
 const {writeFile} = require('fs/promises');
 
 function generatePackageJson(extension, version) {
@@ -68,7 +69,9 @@ function getNpmVersion() {
   return 'estherversion';
 }
 
-module.exports = (extension, ampversion) => {
-  console.log('AMP version', ampversion);
-  generatePackageJson(extension, '1.0');
-};
+function main() {
+  console.log('AMP version', argv.ampversion);
+  generatePackageJson(argv.extension, '1.0');
+}
+
+main();
