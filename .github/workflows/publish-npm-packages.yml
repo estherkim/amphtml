@@ -22,7 +22,7 @@ jobs:
     - uses: actions/github-script@v3
       with:
         script: |          
-          const script = require(`${process.env.GITHUB_WORKSPACE}/.github/workflows/publish-npm-packages.js`)
+          const script = require(`${process.env.GITHUB_WORKSPACE}/build-system/compile/write-package-json.js`)
           script(process.env.matrix.extension, process.env.inputs.ampversion)
     - run: cd ./extensions/{{ matrix.extension }}/1.0
     - run: cat package.json
