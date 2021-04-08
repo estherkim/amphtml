@@ -34,7 +34,7 @@ async function writePackageJson() {
 
   const major = extensionVersion.split('.', 1);
   const minor = ampVersion.slice(0, 10);
-  const patch = ampVersion.slice(-3);
+  const patch = Number(ampVersion.slice(-3));
   const json = {
     name: `@estherproject/${extension}`,
     version: `${major}.${minor}.${patch}`,
@@ -54,27 +54,26 @@ async function writePackageJson() {
         require: 'dist/component-react.js',
       },
     },
-    files: [`${extensionVersion}/dist/*`],
+    files: ['dist/*'],
     repository: {
       type: 'git',
-      url: 'https://github.com/ampproject/amphtml.git',
-      directory: `extensions/${extension}`,
+      url: 'https://github.com/estherkim/amphtml.git',
+      directory: `extensions/${extension}/${extensionVersion}`,
     },
-    homepage: `https://github.com/ampproject/amphtml/tree/master/extensions/${extension}`,
+    homepage: `https://github.com/estherkim/amphtml/tree/master/extensions/${extension}/${extensionVersion}`,
     peerDependencies: {
       preact: '^10.2.1',
       react: '^17.0.0',
     },
   };
 
-  writeFile(`extensions/${extension}/package.json`, JSON.stringify(json)).catch(
-    (e) => {
-      console./*OK*/ error(e);
-      process.exitCode = 1;
-    }
-  );
-  const result = await readFile(`extensions/${extension}/package.json`, 'utf8');
-  console.log(result);
+  writeFile(
+    `extensions/${extension}/${extensionVersion}/package.json`,
+    JSON.stringify(json)
+  ).catch((e) => {
+    console./*OK*/ error(e);
+    process.exitCode = 1;
+  });
   console./*OK*/ log('Wrote package.json for', extension, extensionVersion);
 }
 
