@@ -21,12 +21,20 @@
  * The Github Action that runs this is triggered by releases. See .github/workflows/publish-npm-packages.yml
  */
 
-const [extension, major, ampversion] = process.argv.slice(2);
-const {readFile, writeFile} = require('fs/promises');
+const [extension, extensionVersion, ampVersion] = process.argv.slice(2);
+const {readFile, stat, writeFile} = require('fs/promises');
 
 async function writePackageJson() {
-  const minor = ampversion.slice(0, 10);
-  const patch = ampversion.slice(-3);
+  stat(`extensions/${extension}/${extensionVersion}`, (_, stats) => {
+    if (!stats.isDirectory()) {
+      console.log(`${extension} ${extensionVersion} does not exist; skipping`);
+      return;
+    }
+  });
+
+  const major = extensionVersion.split('.', 1);
+  const minor = ampVersion.slice(0, 10);
+  const patch = ampVersion.slice(-3);
   const json = {
     name: `@estherproject/${extension}`,
     version: `${major}.${minor}.${patch}`,
@@ -43,10 +51,10 @@ async function writePackageJson() {
       },
       './react': {
         import: 'dist/component-react.mjs',
-        require: 'dist/component.react.js',
+        require: 'dist/component-react.js',
       },
     },
-    files: [`${major}/dist/*`],
+    files: [`${extensionVersion}/dist/*`],
     repository: {
       type: 'git',
       url: 'https://github.com/ampproject/amphtml.git',
@@ -67,7 +75,7 @@ async function writePackageJson() {
   );
   const result = await readFile(`extensions/${extension}/package.json`, 'utf8');
   console.log(result);
-  console./*OK*/ log('Wrote package.json for', extension, major);
+  console./*OK*/ log('Wrote package.json for', extension, extensionVersion);
 }
 
 writePackageJson();
