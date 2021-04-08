@@ -4,7 +4,6 @@
 .babel-cache/
 build/
 .amp-dep-check
-extensions/**/dist/**
 c
 .css-cache/
 /dist
