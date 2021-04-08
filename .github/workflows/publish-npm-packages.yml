@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        extension: ['amp-esther'] #['amp-fit-text', 'amp-video']        
+        extension: ['amp-esther'] #['amp-fit-text', 'amp-video']    
     steps:
     - uses: actions/checkout@v2
       with:
@@ -26,7 +26,8 @@ jobs:
     # can script live in .github/workflows?
     - name: Check if v3 exists
       id: v3
-      run: echo "::set-output name=exists::$(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/3.0)"
+      run: |
+        EXISTS=$(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/3.0) && echo "::set-output name=exists::$EXISTS"
     - name: Test if this runs
       if: steps.v3.output.exists == 1
       run: echo 'helloooo but this should skip'
@@ -34,7 +35,8 @@ jobs:
 
     - name: Check if v1 exists
       id: v1
-      run: echo "::set-output name=exists::$(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/1.0)"
+      run:
+        EXISTS=$(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/1.0) && echo "::set-output name=exists::$EXISTS"
     - name: Write package.json for v1
       if: steps.v1.output.exists == 1
       run: node $GITHUB_WORKSPACE/build-system/compile/write-package-json.js ${{ matrix.extension }} 1.0 ${{ github.event.inputs.ampversion }}
