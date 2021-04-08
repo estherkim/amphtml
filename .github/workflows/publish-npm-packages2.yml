@@ -1,0 +1,45 @@
+name: Publish npm packages 2
+on:
+  workflow_dispatch:
+    inputs:
+      ampversion:
+        description: 'AMP version'
+        required: true
+      channel:
+        description: 'release channel'
+        required: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        extension: ['amp-esther'] #['amp-fit-text', 'amp-video']        
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.events.inputs.ampversion }}
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14.x'        
+        registry-url: 'https://registry.npmjs.org'    
+    # add step to build binaries, or can this come from CDN? no, because not served.
+    # can script live in .github/workflows?
+    - name: Check if v3 exists
+      run: V3_EXISTS=$(test -d $${{ GITHUB_WORKSPACE }}/extensions/${{ matrix.extension }}/3.0)
+    - name: Write package.json for v1
+      if: V3_EXISTS
+      run: echo 'helloooo'
+
+
+    - name: Check if v1 exists
+      run: V1_EXISTS=$(test -d $${{ GITHUB_WORKSPACE }}/extensions/${{ matrix.extension }}/1.0)
+    - name: Write package.json for v1
+      if: V1_EXISTS
+      run: node $${{ GITHUB_WORKSPACE }}/build-system/compile/write-package-json.js ${{ matrix.extension }} 1.0 ${{ github.event.inputs.ampversion }}
+    - name: Publish v1
+      if: V1_EXISTS
+      run: |
+        cd $${{ GITHUB_WORKSPACE }}/extensions/${{ matrix.extension }}/1.0
+        npm publish --access public --tag ${{ github.events.inputs.channel }}
+      env: NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
