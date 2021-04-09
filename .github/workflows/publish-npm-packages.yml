@@ -31,13 +31,13 @@ jobs:
           echo "::set-output name=exists::true"
         fi     
     - name: Test if this runs
-      if: steps.v3.output.exists == true
+      if: steps.v3.outputs.exists == true
       run: echo 'helloooo but this should skip'
     - name: Test if this runs 2
-      if: steps.v3.output.exists == 1
+      if: steps.v3.outputs.exists == 1
       run: echo 'helloooo but this should skip'    
     - name: Test if this runs 3
-      if: steps.v3.output.exists == 'true'
+      if: steps.v3.outputs.exists == 'true'
       run: echo 'helloooo but this should skip'        
 
 
