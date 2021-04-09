@@ -27,7 +27,7 @@ jobs:
     - name: Check if v3 exists
       id: v3
       run: |
-        if $(test -d ${{ github_workspace }}/extensions/${{ matrix.extension }}/3.0); then
+        if $(test -d ${{ github.workspace }}/extensions/${{ matrix.extension }}/3.0); then
           echo "::set-output name=exists::true"
         fi     
     - name: Test if this runs
@@ -38,7 +38,7 @@ jobs:
     - name: Check if v1 exists
       id: v1
       run: |
-        if $(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/1.0); then
+        if $(test -d ${{ github.workspace }}/extensions/${{ matrix.extension }}/1.0); then
           echo "::set-output name=exists::true"
         fi
     - name: Write package.json for v1
