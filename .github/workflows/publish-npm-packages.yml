@@ -43,12 +43,12 @@ jobs:
         fi
     - name: Write package.json for v1
       if: steps.v1.outputs.exists == 'true'
-      run: node $GITHUB_WORKSPACE/build-system/compile/write-package-json.js ${{ matrix.extension }} 1.0 ${{ github.event.inputs.ampversion }}
+      run: node ${{ github.workspace }}/build-system/compile/write-package-json.js ${{ matrix.extension }} 1.0 ${{ github.event.inputs.ampversion }}
     - name: Publish v1
       if: steps.v1.outputs.exists == 'true'
       run: |
-        cd $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/1.0
-        npm publish --access public --tag ${{ github.events.inputs.channel }}
+        cd ${{ github.workspace }}/extensions/${{ matrix.extension }}/1.0
+        npm publish --access public --tag ${{ github.event.inputs.channel }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
