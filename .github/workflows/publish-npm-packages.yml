@@ -13,9 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        extension: ['amp-esther'] #['amp-fit-text', 'amp-video']    
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        extension: ['amp-esther'] #['amp-fit-text', 'amp-video']
     steps:
     - uses: actions/checkout@v2
       with:
@@ -54,3 +52,5 @@ jobs:
         npm install
         cat /home/runner/work/_temp/.npmrc
         npm publish --access public --tag ${{ github.event.inputs.channel }}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}        
