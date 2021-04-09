@@ -50,7 +50,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}/extensions/${{ matrix.extension }}/1.0
         npm install
-        cat /home/runner/work/_temp/.npmrc
+        cp /home/runner/work/_temp/.npmrc .npmrc
         npm publish --access public --tag ${{ github.event.inputs.channel }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}        
