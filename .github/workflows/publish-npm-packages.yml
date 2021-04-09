@@ -27,7 +27,7 @@ jobs:
     - name: Check if v3 exists
       id: v3
       run: |
-        if $(test -d $GITHUB_WORKSPACE/extensions/${{ matrix.extension }}/3.0); then
+        if $(test -d ${{ github_workspace }}/extensions/${{ matrix.extension }}/3.0); then
           echo "::set-output name=exists::true"
         fi     
     - name: Test if this runs
