@@ -24,6 +24,9 @@ jobs:
         registry-url: 'https://registry.npmjs.org'    
     # add step to build binaries, or can this come from CDN? no, because not served.
     # can script live in .github/workflows?
+    - name: huh
+      run: cat .npmrc
+
     - name: Check if v3 exists
       id: v3
       run: |
