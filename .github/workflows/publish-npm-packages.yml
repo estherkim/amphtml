@@ -14,14 +14,16 @@ jobs:
     strategy:
       matrix:
         extension: ['amp-esther'] #['amp-fit-text', 'amp-video']
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}            
     steps:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.events.inputs.ampversion }}
     - uses: actions/setup-node@v2
       with:
-        node-version: '14.x'        
-        registry-url: 'https://registry.npmjs.org'
+        node-version: 14.x        
+        registry-url: https://registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
 
     # add step to build binaries, or can this come from CDN? no, because not served.
     # can script live in .github/workflows?
@@ -50,7 +52,7 @@ jobs:
       run: |
         cd ${{ github.workspace }}/extensions/${{ matrix.extension }}/1.0
         npm install
-        cp /home/runner/work/_temp/.npmrc .npmrc
+        cat /home/runner/work/_temp/.npmrc
         npm publish --access public --tag ${{ github.event.inputs.channel }}
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}        
