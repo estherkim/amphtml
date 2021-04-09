@@ -31,15 +31,21 @@ jobs:
           echo "::set-output name=exists::true"
         fi     
     - name: Test if this runs
-      if: steps.v3.output.exists == 'true'
+      if: steps.v3.output.exists == true
       run: echo 'helloooo but this should skip'
+    - name: Test if this runs 2
+      if: steps.v3.output.exists == 1
+      run: echo 'helloooo but this should skip'      
 
 
     - name: Check if v1 exists
       id: v1
       run: |
         if $(test -d ${{ github.workspace }}/extensions/${{ matrix.extension }}/1.0); then
+          echo "hellooo"
           echo "::set-output name=exists::true"
+        else
+          echo 'elseeeee'
         fi
     - name: Write package.json for v1
       if: steps.v1.output.exists == 'true'
