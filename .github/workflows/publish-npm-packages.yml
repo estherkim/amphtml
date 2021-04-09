@@ -25,7 +25,7 @@ jobs:
       with:
         node-version: '14.x'        
         registry-url: 'https://registry.npmjs.org'
-    run: npm install
+    - run: npm install
 
     # add step to build binaries, or can this come from CDN? no, because not served.
     # can script live in .github/workflows?
