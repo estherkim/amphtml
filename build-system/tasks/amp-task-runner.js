@@ -125,11 +125,13 @@ function createTask(taskName, taskFuncName, taskSourceFileName) {
     task.description(taskFunc.description);
   }
   if (isInvokedTask || isDefaultTask) {
+    console.log('invoked');
     if (!isTaskLevelHelp && !isCiBuild()) {
       startAtRepoRoot();
       updatePackages();
     }
-    if (githubActionsWorkflow() == 'Publish NPM packages') {
+    console.log(githubActionsWorkflow());
+    if (githubActionsWorkflow() == 'Publish NPM Packages') {
       console.log('omg');
       updatePackages();
     }
