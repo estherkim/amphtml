@@ -1,4 +1,4 @@
-name: Publish npm packages
+name: Publish NPM Packages
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +26,6 @@ jobs:
         if: ${{ github.repository == 'estherkim/amphtml' }}
         run: |
           npm install
-          amp update-packages
           amp build --extensions=${{ matrix.extension }} --core_runtime_only --npm
           amp dist --extensions=${{ matrix.extension }} --core_runtime_only --npm
           ls -R ${{ github.workspace }}/extensions/${{ matrix.extension }}

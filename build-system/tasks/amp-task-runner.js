@@ -28,7 +28,7 @@ const {
   updateSubpackages,
 } = require('../common/update-packages');
 const {cyan, red, green, magenta, yellow} = require('kleur/colors');
-const {isCiBuild} = require('../common/ci');
+const {isCiBuild, githubActionsWorkflow} = require('../common/ci');
 const {log, logWithoutTimestamp} = require('../common/logging');
 
 /**
@@ -127,6 +127,10 @@ function createTask(taskName, taskFuncName, taskSourceFileName) {
   if (isInvokedTask || isDefaultTask) {
     if (!isTaskLevelHelp && !isCiBuild()) {
       startAtRepoRoot();
+      updatePackages();
+    }
+    if (githubActionsWorkflow() == 'Publish NPM packages') {
+      console.log('omg');
       updatePackages();
     }
     const taskFunc = require(taskSourceFilePath)[taskFuncName];
