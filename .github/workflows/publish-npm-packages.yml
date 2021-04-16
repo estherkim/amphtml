@@ -22,11 +22,11 @@ jobs:
         with:
           node-version: 14.x
           registry-url: https://registry.npmjs.org
-      - run: npm install
       - name: Build extension
         if: ${{ github.repository == 'estherkim/amphtml' }}
         run: |
-          ls node_modules
+          npm install
+          amp update-packages
           amp build --extensions=${{ matrix.extension }} --core_runtime_only --npm
           amp dist --extensions=${{ matrix.extension }} --core_runtime_only --npm
           ls -R ${{ github.workspace }}/extensions/${{ matrix.extension }}
