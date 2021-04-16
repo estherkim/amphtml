@@ -25,9 +25,9 @@ jobs:
       - name: Build extension
         if: ${{ github.repository == 'estherkim/amphtml' }}
         run: |
-          npm install
-          amp build --extensions=${{ matrix.extension }} --core_runtime_only
-          amp dist --extensions=${{ matrix.extension }} --core_runtime_only
+          npm install          
+          amp build --extensions=${{ matrix.extension }} --core_runtime_only --npm
+          amp dist --extensions=${{ matrix.extension }} --core_runtime_only  --npm
           ls -R ${{ github.workspace }}/extensions/${{ matrix.extension }}
 
       # - name: Check if v1 exists

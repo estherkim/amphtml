@@ -129,6 +129,7 @@ async function doDist(extraArgs = {}) {
     fortesting: extraArgs.fortesting || argv.fortesting,
     minify: true,
     watch: argv.watch,
+    npm: argv.npm,
   };
   printClosureConcurrency();
   printNobuildHelp();
@@ -398,4 +399,5 @@ dist.flags = {
   sxg: 'Outputs the compiled code for the SxG build',
   warning_level:
     "Optionally sets closure's warning level to one of [quiet, default, verbose]",
+  npm: 'Build extension binaries for npm',
 };
